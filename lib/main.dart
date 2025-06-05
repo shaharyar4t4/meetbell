@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:meetbell/screen/home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -11,12 +13,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Meet Bell',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primaryColor: Colors.teal,
+        fontFamily: 'Poppins',
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(fontSize: 16, color: Colors.black87),
+          bodyMedium: TextStyle(fontSize: 14, color: Colors.black54),
+          titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
-
-      home: Container(),
+      home: HomeScreen(),
     );
   }
 }
