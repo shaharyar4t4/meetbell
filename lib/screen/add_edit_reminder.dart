@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meetbell/database/database_helper.dart';
+import 'package:meetbell/screen/home_screen.dart';
+import 'package:meetbell/services/notification_helper.dart';
 
 class AddEditReminder extends StatefulWidget {
   final int? reminderId;
@@ -55,7 +57,22 @@ class _AddEditReminderState extends State<AddEditReminder> {
           key: _fromKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [],
+            children: [
+              _buildInputCard(
+                label: "Title",
+                icon: Icons.title,
+                child: TextFormField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    hintText: "Enter The Meeting Agenda",
+                    border: InputBorder.none,
+                  ),
+                  validator: (value) {
+                    value!.isEmpty ? "Please enter a Meeting Agenda" : null;
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -88,5 +105,100 @@ class _AddEditReminderState extends State<AddEditReminder> {
         ),
       ),
     );
+  }
+
+  Widget _buildDataTimePicker({
+    required String label,
+    required IconData icon,
+    required String displayValue,
+    required Function() onPressed,
+  }) {
+    return Card(
+      elevation: 6,
+      color: Colors.teal.shade50,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.teal),
+        title: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        trailing: TextButton(
+          onPressed: onPressed,
+          child: Text(displayValue, style: TextStyle(color: Colors.teal)),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _selectDate() async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _reminderTime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        _reminderTime = DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+          _reminderTime.hour,
+          _reminderTime.minute,
+        );
+      });
+    }
+  }
+
+  Future<void> _selectTime() async {
+    TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: _reminderTime.hour,
+        minute: _reminderTime.minute,
+      ),
+    );
+    if (picked != null) {
+      setState(() {
+        _reminderTime = DateTime(
+          _reminderTime.year,
+          _reminderTime.month,
+          _reminderTime.day,
+          picked.hour,
+          picked.minute,
+        );
+      });
+    }
+  }
+
+  Future<void> _saveReminder() async {
+    if (_fromKey.currentState!.validate()) {
+      final newReminder = {
+        'title': _titleController.text,
+        'description': _descriptionController.text,
+        'isActive': 1,
+        'reminderTime': _reminderTime.toIso8601String(),
+        'category': _category,
+      };
+      if (widget.reminderId == null) {
+        final reminderId = await DbHepler.addReminders(newReminder);
+        NotificationHelper.scheduleNotification(
+          reminderId,
+          _titleController.text,
+          _category,
+          _reminderTime,
+        );
+      } else {
+        await DbHepler.updateReminder(widget.reminderId!, newReminder);
+        NotificationHelper.scheduleNotification(
+          widget.reminderId!,
+          _titleController.text,
+          _category,
+          _reminderTime,
+        );
+      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    }
   }
 }
