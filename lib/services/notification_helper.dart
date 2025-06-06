@@ -57,5 +57,7 @@ class NotificationHelper {
     }
   }
 
-  // static Future <void>
+  static Future<void> cancelNotification(int id) async {
+    await _notificationsPlugin.cancel(id);
+  }
 }
