@@ -36,7 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
         reminder['category'],
         DateTime.parse(reminder['reminderTime']),
       );
+    } else {
+      NotificationHelper.cancelNotification(id);
     }
+    _loadReminder();
+  }
+
+  Future<void> _deleteReminder(int id) async {
+    await DbHepler.deleteReminder(id);
+    NotificationHelper.cancelNotification(id);
+    _loadReminder();
   }
 
   @override
@@ -49,6 +58,48 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text("Meet Bell", style: TextStyle(color: Colors.teal)),
           iconTheme: IconThemeData(color: Colors.teal),
         ),
+        body: _reminder.isEmpty
+            ? Center(
+                child: Text(
+                  "No Meeting Found",
+                  style: TextStyle(fontSize: 18, color: Colors.teal),
+                ),
+              )
+            : ListView.builder(
+                itemCount: _reminder.length,
+                itemBuilder: (context, index) {
+                  final reminder = _reminder[index];
+                  return Dismissible(
+                    key: Key(reminder['id'].toString()),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.redAccent,
+                      padding: EdgeInsets.only(right: 30),
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.delete, color: Colors.white, size: 30),
+                    ),
+                    confirmDismiss: (direction) async {
+                      // return await _showDeleteConfirmationDialog(context);
+                    },
+                    onDismissed: (direction) {
+                      _deleteReminder(reminder['id']);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Reminder Deleted")),
+                      );
+                    },
+                    child: Card(
+                      color: Colors.white,
+                      elevation: 6,
+                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(),
+                    ),
+                  );
+                },
+              ),
+
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
