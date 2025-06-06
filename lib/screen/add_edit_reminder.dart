@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:meetbell/database/database_helper.dart';
 import 'package:meetbell/screen/home_screen.dart';
@@ -64,11 +65,47 @@ class _AddEditReminderState extends State<AddEditReminder> {
                 child: TextFormField(
                   controller: _titleController,
                   decoration: InputDecoration(
+                    hintText: "Enter The Meeting Title",
+                    border: InputBorder.none,
+                  ),
+                  validator: (value) {
+                    value!.isEmpty ? "Please enter a Meeting Title" : null;
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              _buildInputCard(
+                label: "Description",
+                icon: Icons.description,
+                child: TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
                     hintText: "Enter The Meeting Agenda",
                     border: InputBorder.none,
                   ),
                   validator: (value) {
                     value!.isEmpty ? "Please enter a Meeting Agenda" : null;
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              _buildInputCard(
+                label: "Category",
+                icon: Icons.category,
+                child: DropdownButton(
+                  value: _category,
+                  dropdownColor: Colors.teal.shade50,
+
+                  items: ['Meeting', 'Personal', "Other"].map((Category) {
+                    return DropdownMenuItem<String>(
+                      value: Category,
+                      child: Text(Category),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _category = value!;
+                    });
                   },
                 ),
               ),
@@ -101,6 +138,7 @@ class _AddEditReminderState extends State<AddEditReminder> {
               ],
             ),
             SizedBox(height: 10),
+            child,
           ],
         ),
       ),
