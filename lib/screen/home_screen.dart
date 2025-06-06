@@ -95,7 +95,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: ListTile(),
+                      child: ListTile(
+                        leading: Icon(Icons.notifications, color: Colors.teal),
+                        title: Text(
+                          reminder['title'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        subtitle: Text("Category: ${reminder['category']}"),
+                      ),
                     ),
                   );
                 },
