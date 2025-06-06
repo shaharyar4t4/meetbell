@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(Icons.delete, color: Colors.white, size: 30),
                     ),
                     confirmDismiss: (direction) async {
-                      // return await _showDeleteConfirmationDialog(context);
+                      return await _showDeleteConfirmationDialog(context);
                     },
                     onDismissed: (direction) {
                       _deleteReminder(reminder['id']);
