@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meetbell/database/database_helper.dart';
+import 'package:meetbell/screen/add_edit_reminder.dart';
 import 'package:meetbell/services/notification_helper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: _reminder.isEmpty
             ? Center(
                 child: Text(
-                  "No Meeting Found",
+                  "No Meeting Today",
                   style: TextStyle(fontSize: 18, color: Colors.teal),
                 ),
               )
@@ -103,7 +104,12 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddEditReminder()),
+            );
+          },
           child: Icon(Icons.add),
         ),
       ),
