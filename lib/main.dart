@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:meetbell/database/database_helper.dart';
 import 'package:meetbell/screen/home_screen.dart';
+import 'package:meetbell/services/notification_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DbHepler.initDb();
+  await NotificationHelper.initializeNotifications;
+
   runApp(const MyApp());
 }
 
