@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meetbell/database/database_helper.dart';
 import 'package:meetbell/screen/home_screen.dart';
+import 'package:meetbell/screen/splash_screen.dart';
 import 'package:meetbell/services/notification_helper.dart';
 
 void main() async {
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
-      home: HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }
