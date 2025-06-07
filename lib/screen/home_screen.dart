@@ -17,7 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     requestNotificationPermissions();
     _loadReminder();
@@ -120,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         subtitle: Text("Category: ${reminder['category']}"),
                         trailing: Switch(
-                          value: reminder['isActice'] == 1,
+                          value: reminder['isActive'] == 1,
                           activeColor: Colors.teal,
                           inactiveTrackColor: Colors.white,
                           inactiveThumbColor: Colors.black54,
@@ -133,7 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
@@ -149,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // show Confrimation dialog before deleting a reminder
+  // show confirmation dialog before deleting a reminder
   Future<bool?> _showDeleteConfirmationDialog(BuildContext context) {
     return showDialog<bool>(
       context: context,
@@ -157,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return AlertDialog(
           backgroundColor: Colors.white,
           title: Text("Delete Reminder"),
-          content: Text("Are your Sure you want to delete this reminder?"),
+          content: Text("Are you sure you want to delete this reminder?"),
           actions: [
             TextButton(
               onPressed: () {

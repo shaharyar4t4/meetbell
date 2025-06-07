@@ -14,15 +14,15 @@ class AddEditReminder extends StatefulWidget {
 }
 
 class _AddEditReminderState extends State<AddEditReminder> {
-  final _fromKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   String _category = "Meeting";
   DateTime _reminderTime = DateTime.now();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.reminderId != null) {
       fetchReminder();
@@ -56,94 +56,98 @@ class _AddEditReminderState extends State<AddEditReminder> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
-          key: _fromKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInputCard(
-                label: "Title",
-                icon: Icons.title,
-                child: TextFormField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    hintText: "Enter The Meeting Title",
-                    border: InputBorder.none,
-                  ),
-                  validator: (value) {
-                    value!.isEmpty ? "Please enter a Meeting Title" : null;
-                  },
-                ),
-              ),
-              SizedBox(height: 20),
-              _buildInputCard(
-                label: "Description",
-                icon: Icons.description,
-                child: TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    hintText: "Enter The Meeting Agenda",
-                    border: InputBorder.none,
-                  ),
-                  validator: (value) {
-                    value!.isEmpty ? "Please enter a Meeting Agenda" : null;
-                  },
-                ),
-              ),
-              SizedBox(height: 20),
-              _buildInputCard(
-                label: "Category",
-                icon: Icons.category,
-                child: DropdownButton(
-                  value: _category,
-                  dropdownColor: Colors.teal.shade50,
-
-                  items: ['Meeting', 'Personal', "Other"].map((Category) {
-                    return DropdownMenuItem<String>(
-                      value: Category,
-                      child: Text(Category),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _category = value!;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 20),
-              _buildDataTimePicker(
-                label: "Date",
-                icon: Icons.calendar_today,
-                displayValue: DateFormat('yyyy-MM-dd').format(_reminderTime),
-                onPressed: _selectDate,
-              ),
-              SizedBox(height: 10),
-              _buildDataTimePicker(
-                label: "Time",
-                icon: Icons.access_time,
-                displayValue: DateFormat('hh:mm a').format(_reminderTime),
-                onPressed: _selectTime,
-              ),
-              SizedBox(height: 30),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildInputCard(
+                  label: "Title",
+                  icon: Icons.title,
+                  child: TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                      hintText: "Enter The Meeting Title",
+                      border: InputBorder.none,
                     ),
-                    textStyle: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    backgroundColor: Colors.teal,
-                    foregroundColor: Colors.white,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Title is required'
+                        : null,
                   ),
-                  onPressed: _saveReminder,
-                  child: Text("Save Reminder"),
                 ),
-              ),
-            ],
+                SizedBox(height: 20),
+                _buildInputCard(
+                  label: "Description",
+                  icon: Icons.description,
+                  child: TextFormField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      hintText: "Enter The Meeting Agenda",
+                      border: InputBorder.none,
+                    ),
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Description is required'
+                        : null,
+                  ),
+                ),
+                SizedBox(height: 20),
+                _buildInputCard(
+                  label: "Category",
+                  icon: Icons.category,
+                  child: DropdownButton(
+                    value: _category,
+                    dropdownColor: Colors.teal.shade50,
+                    items: ['Meeting', 'Personal', "Other"].map((Category) {
+                      return DropdownMenuItem<String>(
+                        value: Category,
+                        child: Text(Category),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _category = value!;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(height: 20),
+                _buildDataTimePicker(
+                  label: "Date",
+                  icon: Icons.calendar_today,
+                  displayValue: DateFormat('yyyy-MM-dd').format(_reminderTime),
+                  onPressed: _selectDate,
+                ),
+                SizedBox(height: 10),
+                _buildDataTimePicker(
+                  label: "Time",
+                  icon: Icons.access_time,
+                  displayValue: DateFormat('hh:mm a').format(_reminderTime),
+                  onPressed: _selectTime,
+                ),
+                SizedBox(height: 30),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 20,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      backgroundColor: Colors.teal,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: _saveReminder,
+                    child: Text("Save Reminder"),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -242,7 +246,7 @@ class _AddEditReminderState extends State<AddEditReminder> {
   }
 
   Future<void> _saveReminder() async {
-    if (_fromKey.currentState!.validate()) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       final newReminder = {
         'title': _titleController.text,
         'description': _descriptionController.text,
@@ -250,6 +254,7 @@ class _AddEditReminderState extends State<AddEditReminder> {
         'reminderTime': _reminderTime.toIso8601String(),
         'category': _category,
       };
+
       if (widget.reminderId == null) {
         final reminderId = await DbHepler.addReminders(newReminder);
         NotificationHelper.scheduleNotification(
@@ -267,6 +272,7 @@ class _AddEditReminderState extends State<AddEditReminder> {
           _reminderTime,
         );
       }
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
