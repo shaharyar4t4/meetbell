@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meetbell/database/database_helper.dart';
 import 'package:meetbell/screen/add_edit_reminder.dart';
+import 'package:meetbell/screen/reminder_detial.dart';
 import 'package:meetbell/services/notification_helper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -97,7 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: ListTile(
                         onTap: () {
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=> ReminderDetialScreen()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReminderDetialScreen(
+                                reminderId: reminder['id'],
+                              ),
+                            ),
+                          );
                         },
                         leading: Icon(Icons.notifications, color: Colors.teal),
                         title: Text(

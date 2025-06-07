@@ -25,7 +25,6 @@ class _ReminderDetialScreenState extends State<ReminderDetialScreen> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.teal),
-
             backgroundColor: Colors.white,
             title: Text(
               "Reminder Detial",
