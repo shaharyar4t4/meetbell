@@ -96,6 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ListTile(
+                        onTap: () {
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=> ReminderDetialScreen()));
+                        },
                         leading: Icon(Icons.notifications, color: Colors.teal),
                         title: Text(
                           reminder['title'],
@@ -106,6 +109,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         subtitle: Text("Category: ${reminder['category']}"),
+                        trailing: Switch(
+                          value: reminder['isActice'] == 1,
+                          activeColor: Colors.teal,
+                          inactiveTrackColor: Colors.white,
+                          inactiveThumbColor: Colors.black54,
+                          onChanged: (value) {
+                            _toggleReminder(reminder['id'], value);
+                          },
+                        ),
                       ),
                     ),
                   );
