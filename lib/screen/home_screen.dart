@@ -3,6 +3,7 @@ import 'package:meetbell/database/database_helper.dart';
 import 'package:meetbell/screen/add_edit_reminder.dart';
 import 'package:meetbell/screen/reminder_detial.dart';
 import 'package:meetbell/services/notification_helper.dart';
+import 'package:meetbell/services/permission_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    requestNotificationPermissions();
     _loadReminder();
   }
 

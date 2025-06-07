@@ -6,7 +6,7 @@ import 'package:meetbell/services/notification_helper.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DbHepler.initDb();
-  await NotificationHelper.initializeNotifications;
+  await NotificationHelper.initializeNotifications();
 
   runApp(const MyApp());
 }
